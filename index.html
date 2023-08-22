@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Age Calculator</h1>
+    <div class="container">
+        <div class="upper-part">
+            <div>
+                <span class="years">0</span>
+                <p>Years</p>
+            </div>
+            <div>
+                <span class="months">0</span>
+                <p>Months</p>
+            </div>
+            <div>
+                <span class="days">0</span>
+                <p>days</p>
+            </div>
+        </div>
+        <div class="lower-part">
+            <input type="date" class="input">
+            <button>Calculate Age</button>
+        </div>
+        <br><br>
+        <div class="copy">
+            <p style="font-family: 20px; font-style: italic; color: blueviolet;
+            border: 1px solid black; border-radius: 5px;">Copyright © Mahesh</p>
+        </div>
+
+    </div>
+    <script>
+        const inputEl = document.querySelector(".input");
+const yearEl = document.querySelector(".years");
+const monthEl = document.querySelector(".months");
+const dayEl = document.querySelector(".days");
+const buttonEl = document.querySelector("button");
+
+buttonEl.addEventListener("click",calculateAge)
+
+const months = [31,28,31,30,31,30,31,31,30,31,30,31];
+
+function calculateAge(){
+    let today = new Date();
+    let inputDateEl = new Date(inputEl.value);
+    let resultMonth,resultDate,resultYear;
+
+    let inputYear = inputDateEl.getFullYear();
+    let inputMonth = inputDateEl.getMonth()+1;
+    let inputDate = inputDateEl.getDate();
+
+    let currentYear = today.getFullYear();
+    let currentMonth = today.getMonth()+1;
+    let currentDate = today.getDate();
+
+    leapYearCheck(currentYear);
+
+    if(
+        (inputYear > currentYear) ||
+        ( inputMonth > currentMonth && inputYear == currentYear) || 
+        (inputDate > currentDate && inputMonth == currentMonth && inputYear == currentYear))
+    {
+        alert("You are not born yet");
+        displayResult("0","0","0");
+        return;
+    }
+
+    resultYear = currentYear - inputYear;
+
+    if(currentMonth >= inputMonth){
+        resultMonth = currentMonth - inputMonth;
+    }
+    else{
+        resultYear--;
+        resultMonth = 12 + currentMonth - inputMonth;
+    }
+
+    if(currentDate >= inputDate){
+        resultDate = currentDate - inputDate;
+    }
+    else{
+        resultMonth--;
+        let days = months[currentMonth];
+        console.log(days);
+        resultDate = days + currentDate - inputDate;
+        console.log(resultDate);
+        if(resultMonth < 0){
+            resultMonth = 11;
+            resultYear--;
+        }
+    }
+    displayResult(resultDate,resultMonth,resultYear);
+}
+
+function displayResult(resultDate,resultMonth,resultYear){
+    yearEl.innerHTML = resultYear;
+    monthEl.innerHTML = resultMonth;
+    dayEl.innerHTML = resultDate;
+}
+
+function leapYearCheck(year){
+    if(year % 4 == 0 || (year % 100 == 0 && year % 400 == 0)){
+        months[1] = 29;
+    }
+    else{
+        months[1] = 28;
+    }
+}
+    </script>
+</body>
+
+</html>
